@@ -38,7 +38,7 @@ dependencies:
   three_dart: 
     git:
         url: https://github.com/Omnee-Technologies/three_dart
-        ref: 65c43bb4cb6d4f81ae0378a1e8ef053ac4ac2c32 
+        ref: 012b46048fb0757a0a689104f8b76de2026f8681 
   three_dart_jsm:
     path: ../
 
