@@ -176,7 +176,8 @@ class GLTFLoader extends Loader {
       if (magic == binaryExtensionHeaderMagic) {
         // try {
 
-        extensions[gltfExtensions["KHR_BINARY_GLTF"]] = GLTFBinaryExtension(json.buffer);
+        extensions[gltfExtensions["KHR_BINARY_GLTF"]] =
+            GLTFBinaryExtension(json.buffer);
 
         // } catch ( error ) {
 
@@ -193,8 +194,11 @@ class GLTFLoader extends Loader {
 
     Map<String, dynamic> decoded = convert.jsonDecode(content);
 
-    if (decoded["asset"] == null || num.parse(decoded["asset"]["version"]) < 2.0) {
-      if (onError != null) onError('THREE.GLTFLoader: Unsupported asset. glTF versions >= 2.0 are supported.');
+    if (decoded["asset"] == null ||
+        num.parse(decoded["asset"]["version"]) < 2.0) {
+      if (onError != null)
+        onError(
+            'THREE.GLTFLoader: Unsupported asset. glTF versions >= 2.0 are supported.');
       return;
     }
 
@@ -227,10 +231,14 @@ class GLTFLoader extends Loader {
 
         if (extensionName == gltfExtensions["KHR_MATERIALS_UNLIT"]) {
           extensions[extensionName] = GLTFMaterialsUnlitExtension();
-        } else if (extensionName == gltfExtensions["KHR_MATERIALS_PBR_SPECULAR_GLOSSINESS"]) {
-          extensions[extensionName] = GLTFMaterialsPbrSpecularGlossinessExtension();
-        } else if (extensionName == gltfExtensions["KHR_DRACO_MESH_COMPRESSION"]) {
-          extensions[extensionName] = GLTFDracoMeshCompressionExtension(decoded, dracoLoader);
+        } else if (extensionName ==
+            gltfExtensions["KHR_MATERIALS_PBR_SPECULAR_GLOSSINESS"]) {
+          extensions[extensionName] =
+              GLTFMaterialsPbrSpecularGlossinessExtension();
+        } else if (extensionName ==
+            gltfExtensions["KHR_DRACO_MESH_COMPRESSION"]) {
+          extensions[extensionName] =
+              GLTFDracoMeshCompressionExtension(decoded, dracoLoader);
         } else if (extensionName == gltfExtensions["MSFT_TEXTURE_DDS"]) {
           extensions[extensionName] = GLTFTextureDDSExtension(ddsLoader);
         } else if (extensionName == gltfExtensions["KHR_TEXTURE_TRANSFORM"]) {
@@ -238,7 +246,8 @@ class GLTFLoader extends Loader {
         } else if (extensionName == gltfExtensions["KHR_MESH_QUANTIZATION"]) {
           extensions[extensionName] = GLTFMeshQuantizationExtension();
         } else {
-          if (extensionsRequired.indexOf(extensionName) >= 0 && plugins[extensionName] == null) {
+          if (extensionsRequired.indexOf(extensionName) >= 0 &&
+              plugins[extensionName] == null) {
             print('THREE.GLTFLoader: Unknown extension $extensionName.');
           }
         }
@@ -267,7 +276,6 @@ class GLTFLoader extends Loader {
         //       print( 'THREE.GLTFLoader: Unknown extension ${extensionName}.' );
         //     }
         // }
-
       }
     }
 
