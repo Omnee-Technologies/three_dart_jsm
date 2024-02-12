@@ -14,11 +14,17 @@ class GLTFMeshStandardSGMaterial extends MeshStandardMaterial {
   GLTFMeshStandardSGMaterial(params) : super(params) {
     type = "GLTFSpecularGlossinessMaterial";
     //various chunks that need replacing
-    var specularMapParsFragmentChunk =
-        ['#ifdef USE_SPECULARMAP', '	uniform sampler2D specularMap;', '#endif'].join('\n');
+    var specularMapParsFragmentChunk = [
+      '#ifdef USE_SPECULARMAP',
+      '	uniform sampler2D specularMap;',
+      '#endif'
+    ].join('\n');
 
-    var glossinessMapParsFragmentChunk =
-        ['#ifdef USE_GLOSSINESSMAP', '	uniform sampler2D glossinessMap;', '#endif'].join('\n');
+    var glossinessMapParsFragmentChunk = [
+      '#ifdef USE_GLOSSINESSMAP',
+      '	uniform sampler2D glossinessMap;',
+      '#endif'
+    ].join('\n');
 
     var specularMapFragmentChunk = [
       'vec3 specularFactor = specular;',
@@ -64,11 +70,15 @@ class GLTFMeshStandardSGMaterial extends MeshStandardMaterial {
       shader.fragmentShader = shader.fragmentShader
           .replace('uniform float roughness;', 'uniform vec3 specular;')
           .replace('uniform float metalness;', 'uniform float glossiness;')
-          .replace('#include <roughnessmap_pars_fragment>', specularMapParsFragmentChunk)
-          .replace('#include <metalnessmap_pars_fragment>', glossinessMapParsFragmentChunk)
+          .replace('#include <roughnessmap_pars_fragment>',
+              specularMapParsFragmentChunk)
+          .replace('#include <metalnessmap_pars_fragment>',
+              glossinessMapParsFragmentChunk)
           .replace('#include <roughnessmap_fragment>', specularMapFragmentChunk)
-          .replace('#include <metalnessmap_fragment>', glossinessMapFragmentChunk)
-          .replace('#include <lights_physical_fragment>', lightPhysicalFragmentChunk);
+          .replace(
+              '#include <metalnessmap_fragment>', glossinessMapFragmentChunk)
+          .replace('#include <lights_physical_fragment>',
+              lightPhysicalFragmentChunk);
     };
 
     // delete this.metalness;
@@ -84,7 +94,9 @@ class GLTFMeshStandardSGMaterial extends MeshStandardMaterial {
 
   @override
   set specular(v) {
-    uniforms["specular"]["value"] = v;
+    if (uniforms["specular"] != null) {
+      uniforms["specular"]["value"] = v;
+    }
   }
 
   @override
@@ -94,8 +106,8 @@ class GLTFMeshStandardSGMaterial extends MeshStandardMaterial {
     uniforms["specularMap"]["value"] = v;
 
     if (v != null) {
-      defines!["USE_SPECULARMAP"] = ''; // USE_UV is set by the renderer for specular maps
-
+      defines!["USE_SPECULARMAP"] =
+          ''; // USE_UV is set by the renderer for specular maps
     } else {
       // delete this.defines.USE_SPECULARMAP;
       defines!.remove("USE_SPECULARMAP");
@@ -105,7 +117,9 @@ class GLTFMeshStandardSGMaterial extends MeshStandardMaterial {
   get glossiness => uniforms["glossiness"]["value"];
 
   set glossiness(v) {
-    uniforms["glossiness"]["value"] = v;
+    if (uniforms["glossiness"] != null) {
+      uniforms["glossiness"]["value"] = v;
+    }
   }
 
   get glossinessMap => uniforms["glossinessMap"]["value"];

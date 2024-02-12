@@ -932,9 +932,10 @@ class GLTFMaterialsPbrSpecularGlossinessExtension extends GLTFExtension {
 
     if (pbrSpecularGlossiness['specularFactor'] is List) {
       materialParams['specular'] = Color(
-          pbrSpecularGlossiness['specularFactor'][0],
-          pbrSpecularGlossiness['specularFactor'][1],
-          pbrSpecularGlossiness['specularFactor'][2]);
+        pbrSpecularGlossiness['specularFactor'][0].toDouble(),
+        pbrSpecularGlossiness['specularFactor'][1].toDouble(),
+        pbrSpecularGlossiness['specularFactor'][2].toDouble(),
+      );
     }
 
     if (pbrSpecularGlossiness['specularGlossinessTexture'] != null) {

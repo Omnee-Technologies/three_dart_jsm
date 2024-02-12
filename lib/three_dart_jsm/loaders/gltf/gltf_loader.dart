@@ -62,7 +62,7 @@ class GLTFLoader extends Loader {
   }
 
   @override
-  loadAsync(url) async {
+  Future<dynamic> loadAsync(url) async {
     var completer = Completer();
 
     load(url, (buffer) {
