@@ -435,13 +435,13 @@ class GLTFParser {
 
         // Integer parameters to IB/IBA are in array elements, not bytes.
         ib = InterleavedBuffer(
-            Float32Array.fromList(array), byteStride / elementBytes);
+            Float32Array.fromList(array), (byteStride / elementBytes).round());
 
         parser.cache.add(ibCacheKey, ib);
       }
 
-      bufferAttribute = InterleavedBufferAttribute(
-          ib, itemSize, (byteOffset % byteStride) / elementBytes, normalized);
+      bufferAttribute = InterleavedBufferAttribute(ib, itemSize,
+          ((byteOffset % byteStride) / elementBytes).round(), normalized);
     } else {
       if (bufferView == null) {
         array = typedArray.createList(accessorDef["count"] * itemSize);
