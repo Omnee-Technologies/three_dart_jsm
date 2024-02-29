@@ -118,7 +118,7 @@ class GLTFMeshStandardSGMaterial extends MeshStandardMaterial {
 
   set glossiness(v) {
     if (uniforms["glossiness"] != null) {
-      uniforms["glossiness"]["value"] = v;
+      uniforms["glossiness"]["value"] = v!.toInt();
     }
   }
 
