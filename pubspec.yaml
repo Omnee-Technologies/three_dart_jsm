@@ -14,7 +14,7 @@ dependencies:
   three_dart:
     git:
       url: https://github.com/Omnee-Technologies/three_dart
-      ref: f1ff172be59
+      ref: 6b700381
   flutter_gl:
     git:
       path: flutter_gl
