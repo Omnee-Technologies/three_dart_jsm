@@ -52,7 +52,11 @@ class GLTypeData {
     } else if (type == 5125) {
       return Uint32List.view(buffer, offset, length);
     } else if (type == 5126) {
-      return Float32List.view(buffer, offset, length);
+      return Float32List.view(
+        buffer,
+        offset,
+        length.round(),
+      );
     } else {
       throw (" GLTFHelper GLTypeData view type: $type is not support ...");
     }
@@ -78,17 +82,23 @@ class GLTypeData {
 
   static createBufferAttribute(array, itemSize, normalized) {
     if (array is Int8List) {
-      return Int8BufferAttribute(Int8Array.fromList(array), itemSize, normalized);
+      return Int8BufferAttribute(
+          Int8Array.fromList(array), itemSize, normalized);
     } else if (array is Uint8List) {
-      return Uint8BufferAttribute(Uint8Array.fromList(array), itemSize, normalized);
+      return Uint8BufferAttribute(
+          Uint8Array.fromList(array), itemSize, normalized);
     } else if (array is Int16List) {
-      return Int16BufferAttribute(Int16Array.fromList(array), itemSize, normalized);
+      return Int16BufferAttribute(
+          Int16Array.fromList(array), itemSize, normalized);
     } else if (array is Uint16List) {
-      return Uint16BufferAttribute(Uint16Array.fromList(array), itemSize, normalized);
+      return Uint16BufferAttribute(
+          Uint16Array.fromList(array), itemSize, normalized);
     } else if (array is Uint32List) {
-      return Uint32BufferAttribute(Uint32Array.fromList(array), itemSize, normalized);
+      return Uint32BufferAttribute(
+          Uint32Array.fromList(array), itemSize, normalized);
     } else if (array is Float32List) {
-      return Float32BufferAttribute(Float32Array.fromList(array), itemSize, normalized);
+      return Float32BufferAttribute(
+          Float32Array.fromList(array), itemSize, normalized);
     } else {
       throw ("GLTFHelper createBufferAttribute  array.runtimeType : ${array.runtimeType} is not support yet");
     }
@@ -122,9 +132,21 @@ var webGlFilters = {
   9987: LinearMipmapLinearFilter
 };
 
-var webGlWrappings = {33071: ClampToEdgeWrapping, 33648: MirroredRepeatWrapping, 10497: RepeatWrapping};
+var webGlWrappings = {
+  33071: ClampToEdgeWrapping,
+  33648: MirroredRepeatWrapping,
+  10497: RepeatWrapping
+};
 
-var webGlTypeSizes = {'SCALAR': 1, 'VEC2': 2, 'VEC3': 3, 'VEC4': 4, 'MAT2': 4, 'MAT3': 9, 'MAT4': 16};
+var webGlTypeSizes = {
+  'SCALAR': 1,
+  'VEC2': 2,
+  'VEC3': 3,
+  'VEC4': 4,
+  'MAT2': 4,
+  'MAT3': 9,
+  'MAT4': 16
+};
 
 var webGlAttributes = {
   "POSITION": 'position',
@@ -162,7 +184,8 @@ class PathProperties {
 }
 
 var gltfInterpolation = {
-  "CUBICSPLINE": null, // We use a custom interpolant (GLTFCubicSplineInterpolation) for CUBICSPLINE tracks. Each
+  "CUBICSPLINE":
+      null, // We use a custom interpolant (GLTFCubicSplineInterpolation) for CUBICSPLINE tracks. Each
   // keyframe track will be initialized with a default interpolation type, then modified.
   "LINEAR": InterpolateLinear,
   "STEP": InterpolateDiscrete
@@ -189,14 +212,17 @@ Function createDefaultMaterial = (GLTFRegistry cache) {
   return cache.get("DefaultMaterial");
 };
 
-Function addUnknownExtensionsToUserData = (knownExtensions, object, Map<String, dynamic> objectDef) {
+Function addUnknownExtensionsToUserData =
+    (knownExtensions, object, Map<String, dynamic> objectDef) {
   // Add unknown glTF extensions to an object's userData.
 
   if (objectDef["extensions"] != null) {
     objectDef["extensions"].forEach((name, value) {
       if (knownExtensions[name] == null) {
-        object["userData"]["gltfExtensions"] = object["userData"]["gltfExtensions"] ?? {};
-        object["userData"]["gltfExtensions"][name] = objectDef["extensions"][name];
+        object["userData"]["gltfExtensions"] =
+            object["userData"]["gltfExtensions"] ?? {};
+        object["userData"]["gltfExtensions"][name] =
+            objectDef["extensions"][name];
       }
     });
   }
@@ -209,7 +235,8 @@ Function assignExtrasToUserData = (object, gltfDef) {
     if (gltfDef["extras"] is Map) {
       object.userData.addAll(gltfDef["extras"]);
     } else {
-      print('THREE.GLTFLoader: Ignoring primitive type .extras, ${gltfDef["extras"]}');
+      print(
+          'THREE.GLTFLoader: Ignoring primitive type .extras, ${gltfDef["extras"]}');
     }
   }
 };
@@ -300,14 +327,16 @@ Function updateMorphTargets = (mesh, Map<String, dynamic> meshDef) {
         mesh.morphTargetDictionary[targetNames[i]] = i;
       }
     } else {
-      print('THREE.GLTFLoader: Invalid extras.targetNames length. Ignoring names.');
+      print(
+          'THREE.GLTFLoader: Invalid extras.targetNames length. Ignoring names.');
     }
   }
 };
 
 Function createPrimitiveKey = (Map<String, dynamic> primitiveDef) {
   var dracoExtension = primitiveDef["extensions"] != null
-      ? primitiveDef["extensions"][gltfExtensions["KHR_DRACO_MESH_COMPRESSION"]!]
+      ? primitiveDef["extensions"]
+          [gltfExtensions["KHR_DRACO_MESH_COMPRESSION"]!]
       : null;
   var geometryKey;
 
@@ -360,7 +389,8 @@ getNormalizedComponentScale(constructor) {
 /// @param {BufferGeometry} geometry
 /// @param {GLTF.Primitive} primitiveDef
 /// @param {GLTFParser} parser
-Function computeBounds = (geometry, Map<String, dynamic> primitiveDef, GLTFParser parser) {
+Function computeBounds =
+    (geometry, Map<String, dynamic> primitiveDef, GLTFParser parser) {
   Map<String, dynamic> attributes = primitiveDef["attributes"];
 
   var box = Box3(null, null);
@@ -378,13 +408,17 @@ Function computeBounds = (geometry, Map<String, dynamic> primitiveDef, GLTFParse
           Vector3(max[0].toDouble(), max[1].toDouble(), max[2].toDouble()));
 
       // todo normalized is bool ? int ?
-      if (accessor["normalized"] != null && accessor["normalized"] != false && accessor["normalized"] != 0) {
-        var boxScale = getNormalizedComponentScale(webGlComponentTypes[accessor.componentType]);
+      if (accessor["normalized"] != null &&
+          accessor["normalized"] != false &&
+          accessor["normalized"] != 0) {
+        var boxScale = getNormalizedComponentScale(
+            webGlComponentTypes[accessor.componentType]);
         box.min.multiplyScalar(boxScale);
         box.max.multiplyScalar(boxScale);
       }
     } else {
-      print('THREE.GLTFLoader: Missing min/max properties for accessor POSITION.');
+      print(
+          'THREE.GLTFLoader: Missing min/max properties for accessor POSITION.');
 
       return;
     }
@@ -410,12 +444,16 @@ Function computeBounds = (geometry, Map<String, dynamic> primitiveDef, GLTFParse
 
         if (min != null && max != null) {
           // we need to get max of absolute components because target weight is [-1,1]
-          vector.setX(Math.max(Math.abs(min[0]).toDouble(), Math.abs(max[0])).toDouble());
-          vector.setY(Math.max(Math.abs(min[1]).toDouble(), Math.abs(max[1])).toDouble());
-          vector.setZ(Math.max(Math.abs(min[2]).toDouble(), Math.abs(max[2])).toDouble());
+          vector.setX(Math.max(Math.abs(min[0]).toDouble(), Math.abs(max[0]))
+              .toDouble());
+          vector.setY(Math.max(Math.abs(min[1]).toDouble(), Math.abs(max[1]))
+              .toDouble());
+          vector.setZ(Math.max(Math.abs(min[2]).toDouble(), Math.abs(max[2]))
+              .toDouble());
 
           if (accessor["normalized"] == true) {
-            var boxScale = getNormalizedComponentScale(webGlComponentTypes[accessor.componentType]);
+            var boxScale = getNormalizedComponentScale(
+                webGlComponentTypes[accessor.componentType]);
             vector.multiplyScalar(boxScale);
           }
 
@@ -425,7 +463,8 @@ Function computeBounds = (geometry, Map<String, dynamic> primitiveDef, GLTFParse
           // boxes. So for now we make a box that's sometimes a touch too small but is hopefully mostly of reasonable size.
           maxDisplacement.max(vector);
         } else {
-          print('THREE.GLTFLoader: Missing min/max properties for accessor POSITION.');
+          print(
+              'THREE.GLTFLoader: Missing min/max properties for accessor POSITION.');
         }
       }
     }
@@ -448,7 +487,8 @@ Function computeBounds = (geometry, Map<String, dynamic> primitiveDef, GLTFParse
 /// @param {GLTF.Primitive} primitiveDef
 /// @param {GLTFParser} parser
 /// @return {Promise<BufferGeometry>}
-Function addPrimitiveAttributes = (geometry, Map<String, dynamic> primitiveDef, GLTFParser parser) async {
+Function addPrimitiveAttributes =
+    (geometry, Map<String, dynamic> primitiveDef, GLTFParser parser) async {
   var attributes = primitiveDef["attributes"];
 
   List pending = [];
@@ -461,19 +501,22 @@ Function addPrimitiveAttributes = (geometry, Map<String, dynamic> primitiveDef, 
   List<String> attKeys = geometry.attributes.keys.toList();
 
   for (var gltfAttributeName in attributes.keys) {
-    var threeAttributeName = webGlAttributes[gltfAttributeName] ?? gltfAttributeName.toLowerCase();
+    var threeAttributeName =
+        webGlAttributes[gltfAttributeName] ?? gltfAttributeName.toLowerCase();
 
     // Skip attributes already provided by e.g. Draco extension.
     if (attKeys.contains(threeAttributeName)) {
       // skip
     } else {
-      await assignAttributeAccessor(attributes[gltfAttributeName], threeAttributeName);
+      await assignAttributeAccessor(
+          attributes[gltfAttributeName], threeAttributeName);
       pending.add(geometry);
     }
   }
 
   if (primitiveDef["indices"] != null && geometry.index == null) {
-    var accessor = await parser.getDependency('accessor', primitiveDef["indices"]);
+    var accessor =
+        await parser.getDependency('accessor', primitiveDef["indices"]);
     geometry.setIndex(accessor);
   }
 
@@ -481,7 +524,9 @@ Function addPrimitiveAttributes = (geometry, Map<String, dynamic> primitiveDef, 
 
   computeBounds(geometry, primitiveDef, parser);
 
-  return primitiveDef["targets"] != null ? await addMorphTargets(geometry, primitiveDef["targets"], parser) : geometry;
+  return primitiveDef["targets"] != null
+      ? await addMorphTargets(geometry, primitiveDef["targets"], parser)
+      : geometry;
 };
 
 /// @param {BufferGeometry} geometry
@@ -505,7 +550,8 @@ Function toTrianglesDrawMode = (geometry, drawMode) {
       geometry.setIndex(indices);
       index = geometry.getIndex();
     } else {
-      print('THREE.GLTFLoader.toTrianglesDrawMode(): Undefined position attribute. Processing not possible.');
+      print(
+          'THREE.GLTFLoader.toTrianglesDrawMode(): Undefined position attribute. Processing not possible.');
       return geometry;
     }
   }
@@ -540,7 +586,8 @@ Function toTrianglesDrawMode = (geometry, drawMode) {
   }
 
   if ((newIndices.length / 3) != numberOfTriangles) {
-    print('THREE.GLTFLoader.toTrianglesDrawMode(): Unable to generate correct amount of triangles.');
+    print(
+        'THREE.GLTFLoader.toTrianglesDrawMode(): Unable to generate correct amount of triangles.');
   }
 
   // build final geometry
